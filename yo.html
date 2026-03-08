@@ -1,0 +1,556 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Fun Zone Nevaeh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fad0c4 50%,
+          #fad0c4 100%
+        );
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 30px 20px;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-size: 2.3rem;
+        text-align: center;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 18px;
+        padding: 22px;
+        max-width: 520px;
+        width: 100%;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      }
+
+      button {
+        background: #6a11cb;
+        color: #fff;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.1s,
+          background 0.2s;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background: #4e0fb0;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      :root {
+        --primary: #6a11cb;
+        --bg-start: #ff9a9e;
+        --bg-mid: #fad0c4;
+        --card: rgba(255, 255, 255, 0.85);
+        --shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        --radius: 18px;
+        --max-width: 960px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .container {
+        width: min(100%, var(--max-width));
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .site-header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+      }
+
+      .site-logo {
+        font-family: "Pacifico", cursive;
+        font-size: 1.4rem;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .site-nav {
+        display: flex;
+        gap: 14px;
+      }
+
+      .site-nav a {
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #1a1a1a;
+        text-decoration: none;
+        font-weight: bold;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus {
+        background: rgba(106, 17, 203, 0.12);
+        color: var(--primary);
+      }
+
+      .theme-toggle {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          opacity 0.2s;
+      }
+
+      .theme-toggle:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .theme-toggle:active {
+        transform: translateY(0);
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        padding: 8px 14px;
+        background: var(--primary);
+        color: #fff;
+        z-index: 30;
+        border-bottom-right-radius: 10px;
+        transition: top 0.2s;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: var(--shadow);
+        margin: 18px 0;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        display: none;
+        z-index: 25;
+      }
+
+      .back-to-top.show {
+        display: block;
+      }
+
+      @media (max-width: 640px) {
+        .panel {
+          padding: 14px;
+        }
+      }
+
+      #funOutput {
+        margin-top: 16px;
+        font-weight: bold;
+        min-height: 48px;
+      }
+
+      .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0.9;
+        animation: fall 2.5s ease-out forwards;
+        pointer-events: none;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, #1d1f2b 0%, #23273f 100%);
+        color: #f2f2f2;
+      }
+
+      body.dark-mode .card {
+        background: rgba(20, 25, 45, 0.85);
+      }
+
+      body.dark-mode .site-nav a {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      body.dark-mode .site-nav a:hover,
+      body.dark-mode .site-nav a:focus {
+        background: rgba(106, 17, 203, 0.18);
+      }
+
+      body.dark-mode .theme-toggle {
+        background: #8b64ff;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-logo" href="index.html">Nevaeh's Website</a>
+        <div style="display: flex; gap: 12px; align-items: center">
+          <nav class="site-nav" aria-label="Primary">
+            <a href="index.html">Home</a>
+            <a href="yo.html">Fun Zone</a>
+            <a href="arcade.html">Arcade</a>
+          </nav>
+          <button id="themeBtn" class="theme-toggle" type="button">
+            Dark mode
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <h1>Welcome to the Fun Zone!</h1>
+      <div class="card">
+        <p>Try one of the buttons to see something cool happen.</p>
+        <div class="button-row">
+          <button id="confettiBtn">Make it rain confetti</button>
+          <button id="challengeBtn">Give me a challenge</button>
+          <button id="backBtn">Go back to main page</button>
+        </div>
+        <p id="funOutput"></p>
+      </div>
+
+      <div class="card" style="margin-top: 18px">
+        <h2 style="margin-top: 0">Click Challenge 🏁</h2>
+        <p>Try to click the moving button 10 times before it slips away!</p>
+        <div
+          id="gameArea"
+          style="
+            position: relative;
+            height: 220px;
+            border: 2px dashed rgba(0, 0, 0, 0.2);
+            border-radius: 14px;
+            overflow: hidden;
+            margin-top: 12px;
+          "
+        >
+          <button
+            id="movingBtn"
+            style="position: absolute; left: 42%; top: 42%"
+          >
+            Click me!
+          </button>
+        </div>
+        <p id="gameScore" style="margin-top: 12px; font-weight: bold">
+          Clicks: 0 / 10
+        </p>
+        <button id="resetGameBtn" style="margin-top: 10px">Reset game</button>
+      </div>
+      <div class="card" style="margin-top: 18px">
+        <h2 style="margin-top: 0">Reaction Tester ⏱️</h2>
+        <p>
+          Wait for the screen to change color, then click the button as fast as
+          you can.
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <button id="startReactionBtn">Start</button>
+          <button id="reactBtn" disabled>React!</button>
+        </div>
+        <p id="reactionResult" style="margin-top: 12px; font-weight: bold">
+          Ready?
+        </p>
+      </div>
+
+      <div class="card" style="margin-top: 18px">
+        <h2 style="margin-top: 0">Compliment Generator 🌟</h2>
+        <p>Need a boost? Get a random compliment.</p>
+        <button id="complimentBtn">Give me a compliment</button>
+        <p id="complimentText" style="margin-top: 12px; font-weight: bold"></p>
+      </div>
+
+      <div class="card" style="margin-top: 18px">
+        <h2 style="margin-top: 0">Emoji fireworks 🎆</h2>
+        <p>Launch a burst of emoji fun across the screen.</p>
+        <button id="fireworksBtn">Blast off!</button>
+      </div>
+
+      <div class="card" style="margin-top: 18px">
+        <h2 style="margin-top: 0">Random fact generator 📚</h2>
+        <p>Press the button to learn something new.</p>
+        <button id="randFactBtn">Give me a fact</button>
+        <p id="randFactText" style="margin-top: 12px; font-weight: bold"></p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p style="margin: 0; font-size: 0.9rem; color: rgba(0, 0, 0, 0.6)">
+          Made with curiosity and code. 🚀
+        </p>
+      </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      ↑
+    </button>
+
+    <script>
+      const output = document.getElementById("funOutput");
+      const challenges = [
+        "Do a silly dance for 30 seconds!",
+        "Name 5 things you love about your day.",
+        "Try to touch your toes 3 times in a row.",
+        "Say the alphabet backwards as fast as you can.",
+        "Draw a smiley face with your non-dominant hand.",
+      ];
+
+      const movingBtn = document.getElementById("movingBtn");
+      const scoreText = document.getElementById("gameScore");
+      let clicks = 0;
+
+      function updateScore() {
+        scoreText.textContent = `Clicks: ${clicks} / 10`;
+      }
+
+      function moveButton() {
+        const area = document.getElementById("gameArea");
+        const areaRect = area.getBoundingClientRect();
+        const btnRect = movingBtn.getBoundingClientRect();
+
+        const maxLeft = Math.max(0, areaRect.width - btnRect.width - 8);
+        const maxTop = Math.max(0, areaRect.height - btnRect.height - 8);
+
+        movingBtn.style.left = Math.random() * maxLeft + "px";
+        movingBtn.style.top = Math.random() * maxTop + "px";
+      }
+
+      function resetGame() {
+        clicks = 0;
+        updateScore();
+        movingBtn.textContent = "Click me!";
+        moveButton();
+      }
+
+      movingBtn.addEventListener("click", () => {
+        clicks += 1;
+        if (clicks >= 10) {
+          movingBtn.textContent = "You won! 🎉";
+          output.textContent = "Nice work! You clicked it 10 times!";
+        } else {
+          output.textContent = "Keep going — you can do it!";
+          moveButton();
+        }
+        updateScore();
+      });
+
+      document.getElementById("resetGameBtn").addEventListener("click", () => {
+        resetGame();
+        output.textContent = "Game reset! Click the button to start.";
+      });
+
+      document.getElementById("challengeBtn").addEventListener("click", () => {
+        output.textContent =
+          challenges[Math.floor(Math.random() * challenges.length)];
+      });
+
+      document.getElementById("backBtn").addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+
+      document.getElementById("confettiBtn").addEventListener("click", () => {
+        for (let i = 0; i < 35; i++) {
+          const dot = document.createElement("div");
+          dot.className = "confetti";
+          dot.style.left = Math.random() * 100 + "vw";
+          dot.style.background = `hsl(${Math.random() * 360}, 90%, 65%)`;
+          dot.style.animationDuration = 1.8 + Math.random() * 1.2 + "s";
+          dot.style.transform = `rotate(${Math.random() * 360}deg)`;
+          document.body.appendChild(dot);
+          setTimeout(() => dot.remove(), 2700);
+        }
+      });
+      // Reaction tester
+      const reactBtn = document.getElementById("reactBtn");
+      const reactionResult = document.getElementById("reactionResult");
+      let reactionTimeout = null;
+      let reactionStart = 0;
+
+      document
+        .getElementById("startReactionBtn")
+        .addEventListener("click", () => {
+          reactBtn.disabled = true;
+          reactionResult.textContent = "Get ready...";
+          document.body.style.transition = "background 0.15s";
+          document.body.style.background =
+            "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)";
+
+          const delay = 1000 + Math.random() * 2000;
+          reactionTimeout = setTimeout(() => {
+            reactionStart = Date.now();
+            document.body.style.background =
+              "linear-gradient(135deg, #a6ffcb 0%, #12d8fa 100%)";
+            reactBtn.disabled = false;
+            reactionResult.textContent = "Click now!";
+          }, delay);
+        });
+
+      reactBtn.addEventListener("click", () => {
+        if (!reactionStart) return;
+        const elapsed = Date.now() - reactionStart;
+        reactionResult.textContent = `Your reaction: ${elapsed} ms`;
+        reactionStart = 0;
+        reactBtn.disabled = true;
+        document.body.style.background =
+          "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)";
+        clearTimeout(reactionTimeout);
+      });
+
+      // Compliments
+      const compliments = [
+        "You’ve got a great vibe!",
+        "You’re a smart cookie!",
+        "Your smile is contagious.",
+        "You light up the room.",
+        "You're an awesome friend.",
+      ];
+      document.getElementById("complimentBtn").addEventListener("click", () => {
+        document.getElementById("complimentText").textContent =
+          compliments[Math.floor(Math.random() * compliments.length)];
+      });
+
+      // Emoji fireworks
+      document.getElementById("fireworksBtn").addEventListener("click", () => {
+        const emojis = ["🎇", "🎆", "✨", "🌟", "💥", "🎉"];
+        for (let i = 0; i < 60; i++) {
+          const el = document.createElement("div");
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          el.style.position = "fixed";
+          el.style.left = Math.random() * 100 + "vw";
+          el.style.top = Math.random() * 50 + "vh";
+          el.style.fontSize = 18 + Math.random() * 24 + "px";
+          el.style.opacity = 0.9;
+          el.style.pointerEvents = "none";
+          el.style.transition =
+            "transform 1.4s ease-out, opacity 1.4s ease-out";
+          document.body.appendChild(el);
+          requestAnimationFrame(() => {
+            el.style.transform = `translateY(-120px) scale(${1 + Math.random()})`;
+            el.style.opacity = 0;
+          });
+          setTimeout(() => el.remove(), 1500);
+        }
+      });
+
+      // Random fact generator
+      const randomFacts = [
+        "A group of owls is called a parliament.",
+        "A day on Venus is longer than a year on Venus.",
+        "There are more stars in the universe than grains of sand on Earth.",
+        "Your nose can remember 50,000 different scents.",
+        "Octopuses can taste with their arms.",
+      ];
+
+      document.getElementById("randFactBtn").addEventListener("click", () => {
+        document.getElementById("randFactText").textContent =
+          randomFacts[Math.floor(Math.random() * randomFacts.length)];
+      });
+
+      // Theme toggle (persisted)
+      const themeBtn = document.getElementById("themeBtn");
+      const savedTheme = localStorage.getItem("siteTheme");
+      const setTheme = (isDark) => {
+        document.body.classList.toggle("dark-mode", isDark);
+        themeBtn.textContent = isDark ? "Light mode" : "Dark mode";
+      };
+
+      setTheme(savedTheme === "dark");
+      themeBtn.addEventListener("click", () => {
+        const isDark = !document.body.classList.contains("dark-mode");
+        setTheme(isDark);
+        localStorage.setItem("siteTheme", isDark ? "dark" : "light");
+      });
+
+      // Initialize the click challenge layout after layout stabilizes
+      setTimeout(() => {
+        moveButton();
+        updateScore();
+      }, 100);
+
+      // Back-to-top button
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        backToTop.classList.toggle("show", window.scrollY > 320);
+      });
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>

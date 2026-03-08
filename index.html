@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Nevaeh's Website</title>
+    <!-- Google Fonts: Pacifico -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      body {
+        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        animation: fadeIn 1.2s ease;
+      }
+      h1,
+      h2,
+      p,
+      div,
+      img {
+        animation: fadeIn 1.2s ease;
+      }
+      h1 {
+        background: #6a11cb;
+        color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
+      }
+      h2 {
+        background: #2575fc;
+        color: #fff;
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(37, 117, 252, 0.15);
+      }
+      p,
+      div {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        padding: 10px;
+        margin: 10px 0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      img {
+        display: block;
+        margin: 0 auto 10px auto;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+      a {
+        color: #6a11cb;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      a:hover {
+        color: #2575fc;
+        text-decoration: underline;
+      }
+      button {
+        background: #6a11cb;
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.1s,
+          background 0.2s;
+        font-weight: bold;
+      }
+      button:hover {
+        background: #4e0fb0;
+        transform: translateY(-1px);
+      }
+      button:active {
+        transform: translateY(0);
+      }
+
+      :root {
+        --primary: #6a11cb;
+        --primary-alt: #2575fc;
+        --bg-start: #e0c3fc;
+        --bg-end: #8ec5fc;
+        --card: rgba(255, 255, 255, 0.85);
+        --text: #1c1c1c;
+        --text-muted: rgba(0, 0, 0, 0.7);
+        --radius: 14px;
+        --shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        --max-width: 960px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .container {
+        width: min(100%, var(--max-width));
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .site-header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+      }
+
+      .site-logo {
+        font-family: "Pacifico", cursive;
+        font-size: 1.4rem;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .site-nav {
+        display: flex;
+        gap: 14px;
+      }
+
+      .site-nav a {
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: bold;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus {
+        background: rgba(106, 17, 203, 0.12);
+        color: var(--primary);
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        padding: 8px 14px;
+        background: var(--primary);
+        color: #fff;
+        z-index: 30;
+        border-bottom-right-radius: 10px;
+        transition: top 0.2s;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: var(--shadow);
+        margin: 18px 0;
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .responsive-img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        display: none;
+        z-index: 25;
+      }
+
+      .back-to-top.show {
+        display: block;
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, #1d1f2b 0%, #23273f 100%);
+        color: #f2f2f2;
+      }
+
+      body.dark-mode h1 {
+        background: #3f2c8d;
+      }
+
+      body.dark-mode h2 {
+        background: #16385c;
+      }
+
+      body.dark-mode p,
+      body.dark-mode div {
+        background: rgba(20, 25, 45, 0.85);
+        color: #e9e9ff;
+      }
+
+      body.dark-mode a {
+        color: #c39bff;
+      }
+
+      body.dark-mode button {
+        background: #8b64ff;
+      }
+    </style>
+    <meta
+      name="description"
+      content="Nevaeh is a student at LHCSS he is doing this website for 20% of his end of term grade"
+    />
+    <meta charset="utf-8" />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href="img/supernova.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-logo" href="index.html">Nevaeh's Website</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="yo.html">Fun Zone</a>
+          <a href="arcade.html">Arcade</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <h1>
+        Hi welcome to
+        <span style="font-family: &quot;Pacifico&quot;, cursive"
+          >Nevaeh's Website</span
+        >
+      </h1>
+      <div style="text-align: center; margin-top: 10px">
+        <button id="themeBtn">Switch to dark mode</button>
+      </div>
+      <p>A little about me.I am a student at LHCSS and I am in grade 10.</p>
+      <img
+        width="350"
+        height="300"
+        src="img/LHCSS.jpg"
+        alt="LHCSS school building"
+      />
+      <p>
+        <a
+          href="https://www.facebook.com/leonhessschool/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Visit LHCSS Facebook Page</a
+        >
+      </p>
+      <div style="margin: 10px 0">
+        <iframe
+          width="350"
+          height="197"
+          src="https://www.youtube.com/embed/GRF3QD2TQgs?controls=1"
+          title="LHCSS Video"
+          style="border: 0"
+          allow="
+            accelerometer;
+            autoplay;
+            clipboard-write;
+            encrypted-media;
+            gyroscope;
+            picture-in-picture;
+          "
+          allowfullscreen
+        ></iframe>
+      </div>
+      <p>
+        this is a simple website to showcase my interests, academic achievements
+        and hobbies.
+      </p>
+      <h2>1st hobbie BASKETBALL</h2>
+      <img
+        width="350"
+        height="300"
+        src="img/pexels-greenGiant-1752757.jpg"
+        alt="Person playing basketball"
+      />
+      <p>
+        i love basketball because it is fun and i like to play with my friends
+        and family. I have been playing basketball for 3 years now and i am
+        getting better at an ok pace. I hope to play basketball in college and
+        maybe even professionally one day. (if my main aspiration of becoming a
+        pilot doesn't work out.)
+      </p>
+      <h2>2nd hobbie VIDEO GAMES</h2>
+      <img
+        width="350"
+        height="300"
+        src="img/pexels-pixabay-371924.jpg"
+        alt="Video game controller and screen"
+      />
+      <p>
+        i love video games because they are fun and they can be a great way to
+        relax and unwind after a long day. I have been playing video games for
+        as long as i can remember and i have always enjoyed them. My favorite
+        types of games are action, adventure, and open-world games. I also enjoy
+        playing multiplayer games with my friends and family.
+      </p>
+      <h2>3rd hobbie COOKING</h2>
+      <img
+        width="350"
+        height="300"
+        src="img/pexels food-2271106.jpg"
+        alt="Cooking ingredients on a table"
+      />
+      <p>
+        i love cooking because it is a great way to express my creativity and it
+        can be a lot of fun. I have been cooking for a few years now and i have
+        learned a lot of different recipes and techniques from my mom.I also
+        enjoy trying new recipes and experimenting with different ingredients.
+      </p>
+      <h2>My Academic Achievements</h2>
+      <p>
+        i have obtained several academic awards (certificates) and recognition
+        for my hard work and dedication to my school
+      </p>
+
+      <h2>Fun Zone 🎉</h2>
+      <div id="fun-zone">
+        <p id="fun-text">Try something fun — pick a button!</p>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+          "
+        >
+          <button id="jokeBtn">Tell me a joke</button>
+          <button id="colorBtn">Glow up the page</button>
+          <button id="linkFunBtn">Open the Fun Page</button>
+        </div>
+        <p id="joke" style="margin-top: 12px; font-weight: bold"></p>
+      </div>
+
+      <h2>Extra Fun Stuff 🚀</h2>
+      <div class="panel" id="extra-fun">
+        <p id="extraText">Choose a surprise below.</p>
+        <div class="button-row">
+          <button id="factBtn">Tell me a fact</button>
+          <button id="emojiBtn">Make emoji rain</button>
+          <button id="quizBtn">Take a quick quiz</button>
+        </div>
+
+        <div id="quizBox" style="display: none; margin-top: 12px">
+          <p id="quizQuestion" style="font-weight: bold"></p>
+          <div
+            id="quizOptions"
+            style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px"
+          ></div>
+          <button id="nextQuizBtn" style="display: none; margin-top: 10px">
+            Next question
+          </button>
+        </div>
+      </div>
+
+      <h2>Super Extra Power 💥</h2>
+      <div id="super-extra" class="panel">
+        <p>Make a card, generate a meme, or customize the site theme.</p>
+
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+          "
+        >
+          <div class="panel" style="max-width: 320px">
+            <h3>Profile card maker</h3>
+            <input
+              id="nameInput"
+              placeholder="Your name"
+              style="width: 100%; padding: 8px"
+            />
+            <label style="display: block; margin-top: 10px">
+              Pick a color
+              <input
+                id="colorInput"
+                type="color"
+                value="#6a11cb"
+                style="margin-left: 10px"
+              />
+            </label>
+            <button id="makeCardBtn" style="width: 100%; margin-top: 12px">
+              Create card
+            </button>
+            <div
+              id="cardPreview"
+              style="
+                margin-top: 12px;
+                padding: 14px;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.9);
+              "
+            ></div>
+          </div>
+
+          <div class="panel" style="max-width: 320px">
+            <h3>Meme machine</h3>
+            <button id="memeBtn" style="width: 100%">Show me a meme</button>
+            <img
+              id="memeImg"
+              style="
+                width: 100%;
+                margin-top: 12px;
+                border-radius: 14px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+              "
+            />
+          </div>
+        </div>
+      </div>
+
+      <h2>Ultimate Fun Kit 🎒</h2>
+      <div class="panel">
+        <p>
+          Try the magic 8-ball, play a sound effect, or race yourself in a
+          typing challenge.
+        </p>
+
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+          "
+        >
+          <div style="max-width: 320px" class="panel">
+            <h3>Magic 8‑Ball</h3>
+            <input
+              id="eightBallQuestion"
+              placeholder="Ask a yes/no question"
+              style="width: 100%; padding: 8px"
+            />
+            <button id="eightBallBtn" style="width: 100%; margin-top: 10px">
+              Shake it
+            </button>
+            <p
+              id="eightBallAnswer"
+              style="margin-top: 10px; font-weight: bold"
+            ></p>
+          </div>
+
+          <div style="max-width: 320px" class="panel">
+            <h3>Sound effect</h3>
+            <p>Try this chime:</p>
+            <audio
+              id="soundEffect"
+              src="https://www.soundjay.com/buttons/sounds/button-09.mp3"
+            ></audio>
+            <button id="playSoundBtn" style="width: 100%">Play sound</button>
+          </div>
+
+          <div style="max-width: 320px" class="panel">
+            <h3>Typing speed test</h3>
+            <p id="typingPrompt" style="font-weight: bold; margin-bottom: 8px">
+              Type this sentence:
+            </p>
+            <p id="typingSentence" style="margin-top: 0">
+              The quick brown fox jumps over the lazy dog.
+            </p>
+            <input
+              id="typingInput"
+              placeholder="Start typing here"
+              style="width: 100%; padding: 8px"
+            />
+            <p
+              id="typingResult"
+              style="margin-top: 10px; font-weight: bold"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p style="margin: 0; font-size: 0.9rem; color: rgba(0, 0, 0, 0.6)">
+          Built by Nevaeh — all fun, no ads. Keep exploring! 🎉
+        </p>
+      </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      ↑
+    </button>
+
+    <script>
+      const jokes = [
+        "Why don’t skeletons fight each other? They don’t have the guts.",
+        "What do you call fake spaghetti? An impasta!",
+        "Why did the scarecrow win an award? Because he was outstanding in his field!",
+        "I would tell you a joke about construction... but I’m still working on it.",
+      ];
+
+      const facts = [
+        "Honey never spoils — archaeologists have eaten 3,000-year-old honey!",
+        "Octopuses have three hearts and blue blood.",
+        "A group of flamingos is called a 'flamboyance'.",
+        "Bananas are berries, but strawberries are not.",
+        "You can’t hum while holding your nose closed.",
+      ];
+
+      const quizQuestions = [
+        {
+          question: "Which planet is known as the Red Planet?",
+          options: ["Mars", "Venus", "Jupiter"],
+          answer: 0,
+        },
+        {
+          question: "What is the fastest land animal?",
+          options: ["Cheetah", "Eagle", "Dolphin"],
+          answer: 0,
+        },
+        {
+          question: "How many colors are in a rainbow?",
+          options: ["5", "7", "9"],
+          answer: 1,
+        },
+      ];
+
+      const memes = [
+        "https://placekitten.com/450/320",
+        "https://placebear.com/450/320",
+        "https://picsum.photos/450/320?random=1",
+        "https://picsum.photos/450/320?random=2",
+        "https://picsum.photos/450/320?random=3",
+      ];
+
+      const body = document.body;
+      const themeBtn = document.getElementById("themeBtn");
+
+      let currentQuizIndex = 0;
+
+      function pullRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function setTheme(dark) {
+        body.classList.toggle("dark-mode", dark);
+        themeBtn.textContent = dark
+          ? "Switch to light mode"
+          : "Switch to dark mode";
+      }
+
+      function showQuizQuestion(index) {
+        const quizBox = document.getElementById("quizBox");
+        const question = quizQuestions[index];
+        document.getElementById("quizQuestion").textContent = question.question;
+
+        const optionsContainer = document.getElementById("quizOptions");
+        optionsContainer.innerHTML = "";
+
+        question.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.type = "button";
+          btn.addEventListener("click", () => {
+            const correct = idx === question.answer;
+            document.getElementById("extraText").textContent = correct
+              ? "✅ Correct! Great job."
+              : "❌ Not quite — try the next one.";
+            document.getElementById("nextQuizBtn").style.display =
+              "inline-block";
+            Array.from(optionsContainer.children).forEach(
+              (b) => (b.disabled = true),
+            );
+          });
+          optionsContainer.appendChild(btn);
+        });
+
+        document.getElementById("nextQuizBtn").style.display = "none";
+        quizBox.style.display = "block";
+      }
+
+      function startQuiz() {
+        currentQuizIndex = 0;
+        showQuizQuestion(currentQuizIndex);
+      }
+
+      function nextQuiz() {
+        currentQuizIndex = (currentQuizIndex + 1) % quizQuestions.length;
+        showQuizQuestion(currentQuizIndex);
+      }
+
+      function makeEmojiRain() {
+        const emojis = ["🎉", "✨", "😎", "🤩", "🌈", "🔥"];
+        for (let i = 0; i < 40; i++) {
+          const el = document.createElement("div");
+          el.textContent = pullRandom(emojis);
+          el.style.position = "fixed";
+          el.style.left = Math.random() * 100 + "vw";
+          el.style.top = "-20px";
+          el.style.fontSize = 24 + Math.random() * 24 + "px";
+          el.style.opacity = 0.9;
+          el.style.pointerEvents = "none";
+          const duration = 1800 + Math.random() * 1200;
+          el.style.transition = `transform ${duration}ms ease-out, opacity ${duration}ms ease-out`;
+          document.body.appendChild(el);
+          requestAnimationFrame(() => {
+            el.style.transform = `translateY(110vh) rotate(${Math.random() * 720}deg)`;
+            el.style.opacity = 0;
+          });
+          setTimeout(() => el.remove(), duration + 100);
+        }
+      }
+
+      function createCard() {
+        const name =
+          document.getElementById("nameInput").value.trim() || "Friend";
+        const color = document.getElementById("colorInput").value;
+        const card = document.getElementById("cardPreview");
+        card.innerHTML = `\
+          <div style="padding: 14px; border-radius: 14px; background: ${color}; color: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.2);">\
+            <h3 style="margin:0 0 6px;">Hello, ${name}!</h3>\
+            <p style="margin:0;">This is your custom card. Nice choice of color!</p>\
+          </div>`;
+      }
+
+      function showMeme() {
+        const memeImg = document.getElementById("memeImg");
+        // Use a query param to avoid caching and ensure a valid URL for all sources.
+        const url = pullRandom(memes);
+        memeImg.src = url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+        memeImg.alt = "Random meme";
+      }
+
+      document.getElementById("jokeBtn").addEventListener("click", () => {
+        const joke = pullRandom(jokes);
+        document.getElementById("joke").textContent = joke;
+      });
+
+      document.getElementById("colorBtn").addEventListener("click", () => {
+        body.style.background =
+          "radial-gradient(circle at " +
+          Math.random() * 100 +
+          "% " +
+          Math.random() * 100 +
+          "%, #" +
+          Math.floor(Math.random() * 16777215).toString(16) +
+          ", #" +
+          Math.floor(Math.random() * 16777215).toString(16) +
+          ")";
+      });
+
+      document.getElementById("linkFunBtn").addEventListener("click", () => {
+        window.location.href = "yo.html";
+      });
+
+      document.getElementById("factBtn").addEventListener("click", () => {
+        const fact = pullRandom(facts);
+        document.getElementById("extraText").textContent = fact;
+      });
+
+      document.getElementById("emojiBtn").addEventListener("click", () => {
+        makeEmojiRain();
+      });
+
+      document.getElementById("quizBtn").addEventListener("click", () => {
+        document.getElementById("extraText").textContent =
+          "Answer the question below and then press Next to keep going.";
+        startQuiz();
+      });
+
+      document
+        .getElementById("nextQuizBtn")
+        .addEventListener("click", nextQuiz);
+      document
+        .getElementById("makeCardBtn")
+        .addEventListener("click", createCard);
+      document.getElementById("memeBtn").addEventListener("click", showMeme);
+
+      // Magic 8-ball
+      document.getElementById("eightBallBtn").addEventListener("click", () => {
+        const question = document
+          .getElementById("eightBallQuestion")
+          .value.trim();
+        if (!question) {
+          document.getElementById("eightBallAnswer").textContent =
+            "Ask me anything!";
+          return;
+        }
+        const answers = [
+          "It is certain.",
+          "Ask again later.",
+          "Outlook good.",
+          "Don’t count on it.",
+          "Yes — definitely.",
+          "My sources say no.",
+          "Without a doubt.",
+          "Very doubtful.",
+        ];
+        document.getElementById("eightBallAnswer").textContent =
+          pullRandom(answers);
+      });
+
+      // Sound player
+      document.getElementById("playSoundBtn").addEventListener("click", () => {
+        const audio = document.getElementById("soundEffect");
+        audio.currentTime = 0;
+        audio.play();
+      });
+
+      // Typing speed mini-game
+      const typingSentence = document
+        .getElementById("typingSentence")
+        .textContent.trim();
+      const typingInput = document.getElementById("typingInput");
+      const typingResult = document.getElementById("typingResult");
+      let typingStart = null;
+
+      typingInput.addEventListener("input", () => {
+        if (!typingStart) {
+          typingStart = Date.now();
+        }
+
+        const value = typingInput.value;
+        if (value === typingSentence) {
+          const timeSeconds = ((Date.now() - typingStart) / 1000).toFixed(2);
+          typingResult.textContent = `✅ Done! Time: ${timeSeconds}s`;
+          typingInput.disabled = true;
+        } else {
+          typingResult.textContent = "Keep typing...";
+        }
+      });
+
+      document.getElementById("typingInput").addEventListener("focus", () => {
+        typingStart = typingStart || Date.now();
+        typingResult.textContent = "";
+      });
+
+      // Initialize
+      const savedTheme = localStorage.getItem("siteTheme");
+      setTheme(savedTheme === "dark");
+
+      themeBtn.addEventListener("click", () => {
+        const isDark = body.classList.toggle("dark-mode");
+        setTheme(isDark);
+        localStorage.setItem("siteTheme", isDark ? "dark" : "light");
+      });
+
+      // Back-to-top button
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        backToTop.classList.toggle("show", window.scrollY > 320);
+      });
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>

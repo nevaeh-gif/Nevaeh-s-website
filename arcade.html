@@ -1,0 +1,819 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Arcade & Tools — Nevaeh's Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --primary: #6a11cb;
+        --bg-start: #e0c3fc;
+        --bg-end: #8ec5fc;
+        --card: rgba(255, 255, 255, 0.85);
+        --shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        --radius: 18px;
+        --max-width: 960px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+          135deg,
+          var(--bg-start) 0%,
+          var(--bg-end) 100%
+        );
+        color: #1a1a1a;
+      }
+
+      .container {
+        width: min(100%, var(--max-width));
+        margin: 0 auto;
+        padding: 0 20px 40px;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .site-header .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0;
+      }
+
+      .site-logo {
+        font-family: "Pacifico", cursive;
+        font-size: 1.4rem;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      .site-nav {
+        display: flex;
+        gap: 14px;
+      }
+
+      .site-nav a {
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #1a1a1a;
+        text-decoration: none;
+        font-weight: bold;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+
+      .site-nav a:hover,
+      .site-nav a:focus {
+        background: rgba(106, 17, 203, 0.12);
+        color: var(--primary);
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 18px;
+        box-shadow: var(--shadow);
+        margin: 18px 0;
+      }
+
+      h1 {
+        margin: 0;
+        padding-top: 16px;
+        text-align: center;
+      }
+
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      button {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        transition:
+          transform 0.1s,
+          background 0.2s;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background: #4e0fb0;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .game-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+      }
+
+      .canvas-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      canvas {
+        border: 2px solid rgba(0, 0, 0, 0.12);
+        border-radius: 14px;
+        max-width: 100%;
+      }
+
+      .leaderboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .leaderboard table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .leaderboard th,
+      .leaderboard td {
+        padding: 10px;
+        text-align: left;
+      }
+
+      .leaderboard th {
+        background: rgba(106, 17, 203, 0.15);
+      }
+
+      .leaderboard tr:nth-child(even) {
+        background: rgba(0, 0, 0, 0.03);
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+      }
+
+      .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        display: none;
+        z-index: 25;
+      }
+
+      .back-to-top.show {
+        display: block;
+      }
+
+      @media (max-width: 640px) {
+        .panel {
+          padding: 14px;
+        }
+
+        .site-nav {
+          flex-wrap: wrap;
+        }
+      }
+
+      body.dark-mode {
+        background: linear-gradient(135deg, #1d1f2b 0%, #23273f 100%);
+        color: #f2f2f2;
+      }
+
+      body.dark-mode .panel {
+        background: rgba(20, 25, 45, 0.9);
+      }
+
+      body.dark-mode .site-nav a {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      body.dark-mode .site-nav a:hover,
+      body.dark-mode .site-nav a:focus {
+        background: rgba(106, 17, 203, 0.18);
+      }
+
+      body.dark-mode button {
+        background: #8b64ff;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container">
+        <a class="site-logo" href="index.html">Nevaeh's Website</a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="yo.html">Fun Zone</a>
+          <a href="arcade.html">Arcade</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="container">
+      <h1>Arcade & Tools</h1>
+      <p>
+        Play games, build your high score, draw, and chat with the AI helper—all
+        without leaving the page.
+      </p>
+
+      <div class="panel">
+        <h2>🎧 Soundboard</h2>
+        <p>Press a button to play a sound effect.</p>
+        <div class="button-row" style="justify-content: center">
+          <button
+            data-sound="https://www.soundjay.com/buttons/sounds/button-3.mp3"
+          >
+            Click
+          </button>
+          <button
+            data-sound="https://www.soundjay.com/buttons/sounds/button-16.mp3"
+          >
+            Pop
+          </button>
+          <button
+            data-sound="https://www.soundjay.com/buttons/sounds/button-09.mp3"
+          >
+            Chime
+          </button>
+          <button
+            data-sound="https://www.soundjay.com/buttons/sounds/button-10.mp3"
+          >
+            Bell
+          </button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>🕹️ Mini Arcade</h2>
+        <div class="button-row">
+          <button id="snakeBtn">Snake</button>
+          <button id="memoryBtn">Memory Match</button>
+          <button id="whackBtn">Whack-a-Mole</button>
+        </div>
+        <div id="gameArea" class="panel" style="margin-top: 16px">
+          <p style="margin: 0">Select a game to start.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>🏆 Leaderboard</h2>
+        <p>Scores are saved locally in your browser.</p>
+        <div class="leaderboard" id="leaderboards"></div>
+      </div>
+
+      <div class="panel">
+        <h2>🎨 Paint Canvas</h2>
+        <div
+          style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center"
+        >
+          <label style="flex: 1">
+            Brush color
+            <input id="paintColor" type="color" value="#2c2c2c" />
+          </label>
+          <label style="flex: 1">
+            Brush size
+            <input id="paintSize" type="range" min="2" max="30" value="8" />
+          </label>
+          <button id="clearCanvas">Clear</button>
+          <button id="downloadCanvas">Download</button>
+        </div>
+        <canvas
+          id="paintCanvas"
+          width="680"
+          height="360"
+          style="
+            margin-top: 12px;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border: 2px solid rgba(0, 0, 0, 0.12);
+            border-radius: 14px;
+          "
+        ></canvas>
+      </div>
+
+      <div class="panel">
+        <h2>🧠 AI Chatbot (offline)</h2>
+        <p>Ask a question and get an instant, pre-programmed response.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <textarea
+            id="chatInput"
+            rows="3"
+            placeholder="Ask me anything..."
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 12px;
+              border: 1px solid rgba(0, 0, 0, 0.2);
+            "
+          ></textarea>
+          <button id="chatSend">Send</button>
+          <div
+            id="chatHistory"
+            style="
+              max-height: 240px;
+              overflow-y: auto;
+              padding: 12px;
+              border-radius: 14px;
+              background: rgba(255, 255, 255, 0.9);
+              box-shadow: var(--shadow);
+            "
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer" style="text-align: center; padding: 20px 0">
+      <div class="container">
+        <p style="margin: 0; font-size: 0.9rem; color: rgba(0, 0, 0, 0.6)">
+          Built by Nevaeh — all fun. No ads.
+        </p>
+      </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+      ↑
+    </button>
+
+    <script>
+      // Soundboard
+      document.querySelectorAll("[data-sound]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const audio = new Audio(btn.dataset.sound);
+          audio.currentTime = 0;
+          audio.play();
+        });
+      });
+
+      // Leaderboard storage helper
+      const STORAGE_KEY = "arcadeLeaderboard";
+      const leaderboards = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "{}",
+      );
+
+      function saveScore(gameId, score) {
+        if (!leaderboards[gameId]) leaderboards[gameId] = [];
+        leaderboards[gameId].push({ score, date: Date.now() });
+        leaderboards[gameId].sort((a, b) => b.score - a.score);
+        leaderboards[gameId] = leaderboards[gameId].slice(0, 5);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(leaderboards));
+        renderLeaderboards();
+      }
+
+      function renderLeaderboards() {
+        const container = document.getElementById("leaderboards");
+        container.innerHTML = "";
+        const games = [
+          { id: "snake", name: "Snake" },
+          { id: "memory", name: "Memory Match" },
+          { id: "whack", name: "Whack-a-Mole" },
+        ];
+
+        games.forEach((game) => {
+          const panel = document.createElement("div");
+          panel.className = "panel";
+          panel.style.padding = "14px";
+          panel.innerHTML = `<h3 style="margin-top: 0;">${game.name}</h3>`;
+          const table = document.createElement("table");
+          table.innerHTML = `
+            <thead>
+              <tr><th>Rank</th><th>Score</th><th>When</th></tr>
+            </thead>
+            <tbody></tbody>
+          `;
+          const tbody = table.querySelector("tbody");
+          const scores = leaderboards[game.id] || [];
+          if (scores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No scores yet</td></tr>`;
+          } else {
+            scores.forEach((entry, index) => {
+              const date = new Date(entry.date);
+              const row = document.createElement("tr");
+              row.innerHTML = `<td>${index + 1}</td><td>${entry.score}</td><td>${date.toLocaleDateString()}</td>`;
+              tbody.appendChild(row);
+            });
+          }
+          panel.appendChild(table);
+          container.appendChild(panel);
+        });
+      }
+
+      // Helper for clearing game area
+      function setGameContent(html) {
+        const gameArea = document.getElementById("gameArea");
+        gameArea.innerHTML = html;
+      }
+
+      // Snake game
+      function startSnake() {
+        setGameContent(`
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;gap:10px;align-items:center;">
+              <strong>Score:</strong> <span id="snakeScore">0</span>
+            </div>
+            <button id="snakeReset">Restart</button>
+          </div>
+          <canvas id="snakeCanvas" width="400" height="400" style="border:2px solid rgba(0,0,0,0.15);border-radius:14px;display:block;margin-top:16px;"></canvas>
+        `);
+
+        const canvas = document.getElementById("snakeCanvas");
+        const ctx = canvas.getContext("2d");
+        const grid = 20;
+        let snake = [{ x: 8, y: 8 }];
+        let velocity = { x: 0, y: 0 };
+        let apple = { x: 10, y: 10 };
+        let score = 0;
+        let speed = 120;
+        let loopId;
+
+        function draw() {
+          ctx.fillStyle = "#170f2f";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          ctx.fillStyle = "#ff2bff";
+          ctx.fillRect(apple.x * grid, apple.y * grid, grid - 2, grid - 2);
+
+          snake.forEach((segment) => {
+            ctx.fillStyle = "#8a2be2";
+            ctx.fillRect(
+              segment.x * grid,
+              segment.y * grid,
+              grid - 2,
+              grid - 2,
+            );
+          });
+        }
+
+        function advance() {
+          const head = {
+            x: snake[0].x + velocity.x,
+            y: snake[0].y + velocity.y,
+          };
+          if (head.x < 0) head.x = canvas.width / grid - 1;
+          if (head.x >= canvas.width / grid) head.x = 0;
+          if (head.y < 0) head.y = canvas.height / grid - 1;
+          if (head.y >= canvas.height / grid) head.y = 0;
+
+          if (snake.some((seg) => seg.x === head.x && seg.y === head.y)) {
+            endGame();
+            return;
+          }
+
+          snake.unshift(head);
+          if (head.x === apple.x && head.y === apple.y) {
+            score += 10;
+            document.getElementById("snakeScore").textContent = score;
+            placeApple();
+          } else {
+            snake.pop();
+          }
+
+          draw();
+        }
+
+        function placeApple() {
+          apple = {
+            x: Math.floor(Math.random() * (canvas.width / grid)),
+            y: Math.floor(Math.random() * (canvas.height / grid)),
+          };
+          if (snake.some((seg) => seg.x === apple.x && seg.y === apple.y)) {
+            placeApple();
+          }
+        }
+
+        function gameLoop() {
+          advance();
+          loopId = setTimeout(gameLoop, speed);
+        }
+
+        function endGame() {
+          clearTimeout(loopId);
+          saveScore("snake", score);
+          setGameContent(
+            `<p style="text-align:center;">Game over! Your score: <strong>${score}</strong></p><p style="text-align:center;"><button id="snakeRestart">Play again</button></p>`,
+          );
+          document
+            .getElementById("snakeRestart")
+            .addEventListener("click", startSnake);
+        }
+
+        document.addEventListener("keydown", (event) => {
+          const keyMap = {
+            ArrowUp: { x: 0, y: -1 },
+            ArrowDown: { x: 0, y: 1 },
+            ArrowLeft: { x: -1, y: 0 },
+            ArrowRight: { x: 1, y: 0 },
+          };
+          if (keyMap[event.key]) {
+            const next = keyMap[event.key];
+            if (
+              snake.length > 1 &&
+              next.x === -velocity.x &&
+              next.y === -velocity.y
+            )
+              return;
+            velocity = next;
+          }
+        });
+
+        document.getElementById("snakeReset").addEventListener("click", () => {
+          clearTimeout(loopId);
+          startSnake();
+        });
+
+        placeApple();
+        velocity = { x: 1, y: 0 };
+        score = 0;
+        document.getElementById("snakeScore").textContent = score;
+        gameLoop();
+      }
+
+      // Memory match game
+      function startMemory() {
+        setGameContent(
+          `<div style="text-align:center;margin-bottom:12px;"><strong>Score:</strong> <span id="memoryScore">0</span></div><div id="memoryGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;"></div>`,
+        );
+        const grid = document.getElementById("memoryGrid");
+        const values = [...Array(8).keys(), ...Array(8).keys()];
+        const shuffled = values.sort(() => Math.random() - 0.5);
+        let flipped = [];
+        let matched = [];
+        let score = 0;
+
+        function render() {
+          grid.innerHTML = "";
+          shuffled.forEach((value, index) => {
+            const card = document.createElement("button");
+            card.style.height = "80px";
+            card.style.borderRadius = "14px";
+            card.style.border = "2px solid rgba(0,0,0,0.12)";
+            card.style.fontSize = "1.2rem";
+            card.style.cursor = "pointer";
+            card.style.background = matched.includes(index)
+              ? "#6a11cb"
+              : "#fff";
+            card.style.color = matched.includes(index) ? "#fff" : "#1a1a1a";
+            card.textContent =
+              flipped.includes(index) || matched.includes(index) ? value : "";
+            card.disabled = matched.includes(index) || flipped.includes(index);
+            card.addEventListener("click", () => {
+              if (flipped.length >= 2) return;
+              flipped.push(index);
+              render();
+              if (flipped.length === 2) {
+                const [a, b] = flipped;
+                if (shuffled[a] === shuffled[b]) {
+                  matched.push(a, b);
+                  score += 10;
+                  document.getElementById("memoryScore").textContent = score;
+                  flipped = [];
+                  if (matched.length === shuffled.length) {
+                    saveScore("memory", score);
+                    setTimeout(
+                      () => alert("You matched everything! Score saved."),
+                      200,
+                    );
+                  }
+                } else {
+                  setTimeout(() => {
+                    flipped = [];
+                    render();
+                  }, 700);
+                }
+              }
+            });
+            grid.appendChild(card);
+          });
+        }
+
+        render();
+      }
+
+      // Whack-a-mole
+      function startWhack() {
+        setGameContent(
+          `<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;"><div><strong>Score:</strong> <span id="moleScore">0</span></div><button id="moleReset">Restart</button></div><div id="moleGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;"></div>`,
+        );
+        const grid = document.getElementById("moleGrid");
+        let score = 0;
+        let active = null;
+        let interval;
+
+        function render() {
+          grid.innerHTML = "";
+          for (let i = 0; i < 9; i++) {
+            const hole = document.createElement("button");
+            hole.style.height = "80px";
+            hole.style.borderRadius = "18px";
+            hole.style.border = "2px solid rgba(0,0,0,0.12)";
+            hole.style.background = i === active ? "#ff595e" : "#fff";
+            hole.style.cursor = "pointer";
+            hole.disabled = i !== active;
+            hole.addEventListener("click", () => {
+              if (i !== active) return;
+              score += 10;
+              document.getElementById("moleScore").textContent = score;
+              active = null;
+              render();
+            });
+            grid.appendChild(hole);
+          }
+        }
+
+        function next() {
+          active = Math.floor(Math.random() * 9);
+          render();
+        }
+
+        function start() {
+          clearInterval(interval);
+          score = 0;
+          document.getElementById("moleScore").textContent = score;
+          next();
+          interval = setInterval(next, 1200);
+        }
+
+        document.getElementById("moleReset").addEventListener("click", start);
+        start();
+      }
+
+      // Paint canvas
+      const paintCanvas = document.getElementById("paintCanvas");
+      const paintCtx = paintCanvas.getContext("2d");
+      let painting = false;
+      const paintColor = document.getElementById("paintColor");
+      const paintSize = document.getElementById("paintSize");
+
+      function resizeCanvas() {
+        const rect = paintCanvas.getBoundingClientRect();
+        paintCanvas.width = rect.width * window.devicePixelRatio;
+        paintCanvas.height = rect.height * window.devicePixelRatio;
+        paintCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      }
+
+      function paintStart(e) {
+        painting = true;
+        paintCtx.strokeStyle = paintColor.value;
+        paintCtx.lineWidth = paintSize.value;
+        paintCtx.lineCap = "round";
+        paintCtx.beginPath();
+        const rect = paintCanvas.getBoundingClientRect();
+        paintCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+      }
+
+      function paintMove(e) {
+        if (!painting) return;
+        const rect = paintCanvas.getBoundingClientRect();
+        paintCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        paintCtx.stroke();
+      }
+
+      function paintEnd() {
+        painting = false;
+      }
+
+      function clearPaint() {
+        paintCtx.clearRect(0, 0, paintCanvas.width, paintCanvas.height);
+      }
+
+      function downloadPaint() {
+        const link = document.createElement("a");
+        link.download = "nevaeh-drawing.png";
+        link.href = paintCanvas.toDataURL();
+        link.click();
+      }
+
+      paintCanvas.addEventListener("mousedown", paintStart);
+      paintCanvas.addEventListener("mousemove", paintMove);
+      window.addEventListener("mouseup", paintEnd);
+      paintCanvas.addEventListener("touchstart", (e) => {
+        const touch = e.touches[0];
+        paintStart(touch);
+      });
+      paintCanvas.addEventListener("touchmove", (e) => {
+        const touch = e.touches[0];
+        paintMove(touch);
+      });
+      paintCanvas.addEventListener("touchend", paintEnd);
+
+      document
+        .getElementById("clearCanvas")
+        .addEventListener("click", clearPaint);
+      document
+        .getElementById("downloadCanvas")
+        .addEventListener("click", downloadPaint);
+
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      // Chatbot
+      const chatHistory = document.getElementById("chatHistory");
+      const chatInput = document.getElementById("chatInput");
+
+      function appendChat(role, text) {
+        const entry = document.createElement("div");
+        entry.style.marginBottom = "10px";
+        entry.innerHTML = `<strong>${role}:</strong> ${text}`;
+        chatHistory.appendChild(entry);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+      const chatResponses = [
+        {
+          trigger: /hello|hi|hey/i,
+          response: "Hey there! Want to play something fun?",
+        },
+        {
+          trigger: /game|play/i,
+          response:
+            "Try the arcade games or the paint canvas! Which one sounds fun?",
+        },
+        {
+          trigger: /score|high score/i,
+          response: "Your best scores are stored in the leaderboard section.",
+        },
+        {
+          trigger: /draw|paint/i,
+          response: "Open the paint canvas and create something awesome!",
+        },
+        {
+          trigger: /music|sound/i,
+          response:
+            "Check out the soundboard and press buttons to play effects.",
+        },
+        {
+          trigger: /how are you/i,
+          response: "I’m a bunch of code, but I’m feeling lively today! 😊",
+        },
+      ];
+
+      document.getElementById("chatSend").addEventListener("click", () => {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        appendChat("You", text);
+        let response =
+          "I’m not sure how to answer that — try asking me about games or drawing!";
+        for (const rule of chatResponses) {
+          if (rule.trigger.test(text)) {
+            response = rule.response;
+            break;
+          }
+        }
+        setTimeout(() => appendChat("Bot", response), 250);
+        chatInput.value = "";
+      });
+
+      // Game selection buttons
+      document.getElementById("snakeBtn").addEventListener("click", startSnake);
+      document
+        .getElementById("memoryBtn")
+        .addEventListener("click", startMemory);
+      document.getElementById("whackBtn").addEventListener("click", startWhack);
+
+      // Initialize
+      renderLeaderboards();
+
+      // Back-to-top button
+      const backToTop = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        backToTop.classList.toggle("show", window.scrollY > 320);
+      });
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>
